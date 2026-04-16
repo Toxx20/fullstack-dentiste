@@ -44,3 +44,29 @@ class CustomTokenSerializer(TokenObtainPairSerializer):
         }
 
         return data
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    annee_experience = serializers.IntegerField(required=False, allow_null=True)
+
+    class Meta:
+        model = Utilisateur
+        fields = [
+            'username',
+            'email', 
+            'password',
+            'age',
+            'adresse',
+            'telephone1',
+            'telephone2',
+            'role',
+            'annee_experience'
+        ]
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = Utilisateur(**validated_data)
+        user.set_password(password)  #hash le mot de passe
+        user.save()
+        return user

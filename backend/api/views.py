@@ -3,11 +3,13 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework.generics import ListAPIView,CreateAPIView,RetrieveUpdateDestroyAPIView
 from .models import Client,Utilisateur
-from .serilaizers import ClientSerializers,CustomTokenSerializer,UtilisateurSerializer
+from .serilaizers import ClientSerializers,CustomTokenSerializer,UtilisateurSerializer,RegisterSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics, permissions
+
 
 class ClientListView(ListAPIView):
     queryset = Client.objects.all()
@@ -46,3 +48,9 @@ class MeView(APIView):
 class ClientDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Client.objects.all()
     serializer_class = ClientSerializers
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = Utilisateur.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = [permissions.AllowAny] 
